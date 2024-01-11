@@ -226,4 +226,4 @@ RUN sudo apt-get -qq install libglib2.0-0 libsndfile1 libsm6 libxext6 libxrender
 
 SHELL ["conda", "run", "-n", "torch_zoo", "/bin/bash", "-c"]
 
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "torch_zoo"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "pwc"]
