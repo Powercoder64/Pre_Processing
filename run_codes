@@ -1,3 +1,0 @@
-conda activate pwc
-
-python main.py feature_type=i3d on_extraction=save_numpy device_ids="[0]" extraction_fps=25 stack_size=16 step_size=16 video_path = "[./video/110.006.2018_ELA2_Year2_20180205.mp4, ./video/110.012_ELA2_Yea2_20171013.mp4]"
