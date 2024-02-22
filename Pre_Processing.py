@@ -7,7 +7,6 @@ import os
 from utils.utils import build_cfg_path, form_list_from_user_input, sanity_check
 
 def parallel_feature_extraction(args):
-    request_type = "Pre_Processing"
 
     try:
 
@@ -22,6 +21,7 @@ def parallel_feature_extraction(args):
         # closing the tqdm progress bar to avoid some unexpected errors due to multi-threading
         extractor.progress.close()
         filename=args.filename
+        request_type = args.response_type
         messageid = args.messageid
         send_status_update(messageid, filename, request_type, 'preprocessing-completed', '...')
 
