@@ -21,7 +21,7 @@ def parallel_feature_extraction(args):
         # closing the tqdm progress bar to avoid some unexpected errors due to multi-threading
         extractor.progress.close()
         filename=args.filename
-        request_type = args.response_type
+        request_type = args.request_type
         messageid = args.messageid
         send_status_update(messageid, filename, request_type, 'preprocessing-completed', '...')
 
