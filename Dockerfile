@@ -2,6 +2,7 @@ FROM ubuntu:18.04
 
 RUN apt-get update
 RUN apt-get install -y sudo
+RUN apt-get install -y git
 
 RUN adduser --disabled-password --gecos '' ubuntu
 RUN adduser ubuntu sudo
@@ -13,6 +14,8 @@ SHELL ["/bin/bash", "-c"]
 RUN sudo apt-get -qq install curl vim git zip
 
 WORKDIR /home/ubuntu/
+
+Run git clone -b master https://github.com/Powercoder64/Pre_Processing.git
 
 RUN curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 RUN bash ./Miniconda3-latest-Linux-x86_64.sh -b
