@@ -225,7 +225,7 @@ RUN conda clean -afy
 RUN rm ./Miniconda3-latest-Linux-x86_64.sh
 
 RUN sudo apt-get -qq install libglib2.0-0 libsndfile1 libsm6 libxext6 libxrender-dev libgl1
-
+RUN pip install requests
 SHELL ["conda", "run", "-n", "torch_zoo", "/bin/bash", "-c"]
 
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "pwc"]
