@@ -10,7 +10,7 @@ from models.i3d.transforms.transforms import (Clamp, PermuteAndUnsqueeze,
                                               PILToTensor, ResizeImproved,
                                               ScaleTo1_1, TensorCenterCrop,
                                               ToFloat, ToUInt8)
-from models.raft.raft_src.raft import RAFT, InputPadder
+#from models.raft.raft_src.raft import RAFT, InputPadder
 from torchvision import transforms
 from tqdm import tqdm
 from utils.utils import (action_on_extraction, form_list_from_user_input,
@@ -23,28 +23,28 @@ I3D_RGB_PATH = './models/i3d/checkpoints/i3d_rgb.pt'
 I3D_FLOW_PATH = './models/i3d/checkpoints/i3d_flow.pt'
 PRE_CENTRAL_CROP_MIN_SIDE_SIZE = 256
 CENTRAL_CROP_MIN_SIDE_SIZE = 224
-DEFAULT_I3D_STEP_SIZE = 64
-DEFAULT_I3D_STACK_SIZE = 64
+DEFAULT_I3D_STEP_SIZE = 16
+DEFAULT_I3D_STACK_SIZE = 16
 I3D_CLASSES_NUM = 400
 
 class ExtractI3D(torch.nn.Module):
 
     def __init__(self, args):
         super(ExtractI3D, self).__init__()
-        self.feature_type = args.feature_type
+        self.feature_type = 'i3d'
         if args.streams is None:
             self.streams = ['rgb', 'flow']
         else:
             self.streams = [args.streams]
         self.path_list = form_list_from_user_input(args)
-        self.flow_type = args.flow_type
+        self.flow_type = 'pwc'
         self.flow_model_paths = {'pwc': PWC_MODEL_PATH, 'raft': RAFT_MODEL_PATH}
         self.i3d_weights_paths = {'rgb': I3D_RGB_PATH, 'flow': I3D_FLOW_PATH}
         self.min_side_size = PRE_CENTRAL_CROP_MIN_SIDE_SIZE
         self.central_crop_size = CENTRAL_CROP_MIN_SIDE_SIZE
-        self.extraction_fps = args.extraction_fps
-        self.step_size = args.step_size
-        self.stack_size = args.stack_size
+        self.extraction_fps = 25
+        self.step_size = 16
+        self.stack_size = 16
         if self.step_size is None:
             self.step_size = DEFAULT_I3D_STEP_SIZE
         if self.stack_size is None:
@@ -72,7 +72,7 @@ class ExtractI3D(torch.nn.Module):
         self.show_pred = args.show_pred
         self.i3d_classes_num = I3D_CLASSES_NUM
         self.keep_tmp_files = args.keep_tmp_files
-        self.on_extraction = args.on_extraction
+        self.on_extraction = 'save_numpy'
         self.tmp_path = os.path.join(args.tmp_path, self.feature_type)
         self.output_path = os.path.join(args.output_path, self.feature_type)
         self.progress = tqdm(total=len(self.path_list))
@@ -122,7 +122,7 @@ class ExtractI3D(torch.nn.Module):
         '''
         def _run_on_a_stack(feats_dict, rgb_stack, models, device, stack_counter, padder=None):
             rgb_stack = torch.cat(rgb_stack).to(device)
-
+            #self.stream = ['rgb', 'flow']
             for stream in self.streams:
                 with torch.no_grad():
                     # if i3d stream is flow, we first need to calculate optical flow, otherwise, we use rgb
@@ -242,7 +242,10 @@ class ExtractI3D(torch.nn.Module):
 
         # Feature extraction models (rgb and flow streams)
         i3d_stream_models = {}
+        self.streams = ['rgb', 'flow']
         for stream in self.streams:
+            print(stream)
+
             i3d_stream_model = I3D(num_classes=self.i3d_classes_num, modality=stream)
             i3d_stream_model.load_state_dict(torch.load(self.i3d_weights_paths[stream], map_location='cpu'))
             i3d_stream_model = i3d_stream_model.to(device)

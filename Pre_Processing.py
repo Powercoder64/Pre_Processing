@@ -35,6 +35,8 @@ def parallel_feature_extraction(args):
 
 
 
+
+
 def send_status_update(messageid, filename, request_type, response_type, comment=""):
     url = "http://aiai-service-service.aiai-ml-curvex-dev.svc.cluster.local/aiai/api/model_run_status_update"
     payload = json.dumps({
@@ -50,8 +52,7 @@ def send_status_update(messageid, filename, request_type, response_type, comment
 
 if __name__ == "__main__":
     cfg_cli = OmegaConf.from_cli()
-    print(cfg_cli)
-    cfg_yml = OmegaConf.load(build_cfg_path(cfg_cli.feature_type))
+    cfg_yml = OmegaConf.load(build_cfg_path('i3d'))
     # the latter arguments are prioritized
     cfg = OmegaConf.merge(cfg_yml, cfg_cli)
     # OmegaConf.set_readonly(cfg, True)

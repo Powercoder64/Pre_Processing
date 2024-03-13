@@ -1,4 +1,5 @@
 FROM ubuntu:18.04
+LABEL maintainer="acw6ze@virginia.edu"
 
 RUN apt-get update
 RUN apt-get install -y sudo

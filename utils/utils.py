@@ -135,23 +135,29 @@ def form_list_from_user_input(args: Union[argparse.Namespace, DictConfig]) -> li
     Returns:
         list: list with paths
     '''
-    if args.file_with_video_paths is None:
-        path_list = '/home/project/' + args.filename + '/' + args.filename
-        # ListConfig does not support indexing with tensor scalars, e.g. tensor(1, device='cuda:0')
-        if isinstance(args.video_paths, ListConfig):
-            path_list = list(path_list)
-    else:
-        with open(args.file_with_video_paths) as rfile:
-            # remove carriage return
-            path_list = [line.replace('\n', '') for line in rfile.readlines()]
-            # remove empty lines
-            path_list = [path for path in path_list if len(path) > 0]
+    # if args.file_with_video_paths is None:
+    path_list = './video/' + args.filename[0:-4] + '/' + args.filename
+    path_list = [path_list]
 
-    # sanity check: prints paths which do not exist
-    for path in path_list:
-        not_exist = not os.path.exists(path)
-        if not_exist:
-            print(f'The path does not exist: {path}')
+    path_list = list(path_list)
+    #print(path_list)
+
+
+        # ListConfig does not support indexing with tensor scalars, e.g. tensor(1, device='cuda:0')
+    #     if isinstance(path_list, ListConfig):
+    #         path_list = list(path_list)
+    # else:
+    #     with open(args.file_with_video_paths) as rfile:
+    #         # remove carriage return
+    #         path_list = [line.replace('\n', '') for line in rfile.readlines()]
+    #         # remove empty lines
+    #         path_list = [path for path in path_list if len(path) > 0]
+    #
+    # # sanity check: prints paths which do not exist
+    # for path in path_list:
+    #     not_exist = not os.path.exists(path)
+    #     if not_exist:
+    #         print(f'The path does not exist: {path}')
 
     return path_list
 
