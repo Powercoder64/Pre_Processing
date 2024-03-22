@@ -18,8 +18,6 @@ ENV APP_LOC /home/ubuntu/Pre_Processing
 RUN mkdir -p $APP_LOC
 WORKDIR $APP_LOC
 
-ADD ./..
-
 RUN git clone -b master https://github.com/Powercoder64/Pre_Processing.git
 RUN curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 RUN bash ./Miniconda3-latest-Linux-x86_64.sh -b
