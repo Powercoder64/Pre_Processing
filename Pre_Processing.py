@@ -59,7 +59,7 @@ if __name__ == "__main__":
     print(OmegaConf.to_yaml(cfg))
     # some printing
     if cfg.on_extraction in ['save_numpy', 'save_pickle']:
-        print(f'Saving features to {cfg.output_path}')
+        print(f'Saving features files(version March 26 2023) to {cfg.output_path}')
     if cfg.keep_tmp_files:
         print(f'Keeping temp files in {cfg.tmp_path}')
 
