@@ -21,9 +21,9 @@ def parallel_feature_extraction(args):
         # closing the tqdm progress bar to avoid some unexpected errors due to multi-threading
         extractor.progress.close()
         filename=args.filename
-        request_type = args.request_type
+        requesttype = args.requesttype
         messageid = args.messageid
-        send_status_update(messageid, filename, request_type, 'preprocessing-completed', '...')
+        send_status_update(messageid, filename, requesttype, 'preprocessing-completed', '...')
 
     except Exception as e:
         filename=args.filename
@@ -31,24 +31,28 @@ def parallel_feature_extraction(args):
 
         error_message = str(e)
 
-        send_status_update(messageid, filename, request_type,'error', error_message)
+        send_status_update(messageid, filename, requesttype,'error', error_message)
 
 
 
 
 
-def send_status_update(messageid, filename, request_type, response_type, comment=""):
+def send_status_update(messageid, filename, requesttype, response_type, comment=""):
     url = "http://aiai-service-service.aiai-ml-curvex-dev.svc.cluster.local/aiai/api/model_run_status_update"
     payload = json.dumps({
         "messageid": messageid,
         "filename": filename,
-        "requestType": request_type,
+        "requestType": requesttype,
         "responseType": response_type,
         "comment": comment
     })
     headers = {'Content-Type': 'application/json'}
-    response = requests.post(url, headers=headers, data=payload)
-    print(response.text)
+    try:
+        response = requests.request("POST", url, headers=headers, data=payload)
+        print(response.text)
+    except Exception as e:
+        with open(cfg.output_path + '/error.txt', 'w') as f:
+            f.write(str(e))
 
 if __name__ == "__main__":
     cfg_cli = OmegaConf.from_cli()
